@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Smart Quiz - AI Voice & Weak Areas</title>
+  <title>📖 Smart Quiz - 80% Attempt Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -38,16 +38,13 @@
     .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--question-bg); padding: 15px; border-radius: 12px; }
     .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
 
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; position: relative; }
-    
-    /* Voice Button Style */
-    .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; }
-
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; }
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
     .option-btn:hover { background: var(--primary-color); color: white; }
     
     #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
 
+    /* Tracker UI */
     .tracker-card { display: none; margin-top: 10px; }
     .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
     .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
@@ -57,9 +54,6 @@
     .status-yellow { background: #f1c40f; }
     .status-red { background: #e74c3c; }
     .last-date { font-size: 11px; color: #888; }
-
-    /* Switch Style for Auto-Read */
-    .switch-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -78,11 +72,6 @@
 
     <div id="setupArea">
         <h2>🔥 Smart Quiz Pro</h2>
-        <div class="switch-container">
-          <label>🔊 Auto-Read:</label>
-          <input type="checkbox" id="autoReadSwitch">
-        </div>
-
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- सभी विषय --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
         
@@ -92,7 +81,6 @@
         </div>
         
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 क्विज़ शुरू करें</button>
-        <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
         <button class="main-btn" onclick="toggleTracker()" style="background: #3498db; color: white;">📊 Revision Tracker</button>
         <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल</button>
 
@@ -107,13 +95,12 @@
 
   <script>
     let quizData = {}, selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
-    let questionsAttempted = 0; 
-    let currentSub = "", currentCh = "", isWeakMode = false;
+    let questionsAttempted = 0; // Track how many questions answered
+    let currentSub = "", currentCh = ""; 
     let savedList = JSON.parse(localStorage.getItem("quiz_bookmarks")) || [];
     let revisionDates = JSON.parse(localStorage.getItem("revision_dates")) || {};
-    let weakList = JSON.parse(localStorage.getItem("weak_questions")) || [];
 
-    window.onload = () => { checkSavedBtn(); updateWeakBtn(); };
+    window.onload = checkSavedBtn;
 
     function toggleTheme() {
       const b = document.body;
@@ -160,7 +147,6 @@
     }
 
     function startQuiz() {
-      isWeakMode = false;
       currentSub = document.getElementById("subjectSelect").value;
       currentCh = document.getElementById("chapterSelect").value;
       let allTempQ = [];
@@ -177,13 +163,6 @@
       
       const mins = parseInt(document.getElementById("customTime").value);
       if(mins > 0) startTimer(mins);
-      initQuizUI();
-    }
-
-    function startWeakAreasQuiz() {
-      if(weakList.length === 0) return;
-      isWeakMode = true;
-      selectedQuestions = [...weakList].sort(() => Math.random() - 0.5);
       initQuizUI();
     }
 
@@ -216,96 +195,60 @@
         <button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button>`;
     }
 
-    function speak(text) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'hi-IN';
-      window.speechSynthesis.speak(utterance);
-    }
-
     function showQuestion() {
       const q = selectedQuestions[currentIdx];
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
-      
-      document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="readFullQuestion()">🔊</button>`;
-      
-      if(document.getElementById("autoReadSwitch").checked) {
-        setTimeout(() => readFullQuestion(), 500);
-      }
-
+      document.getElementById("questionBox").innerHTML = q.question;
       const bBtn = document.getElementById("bookmarkActionBtn");
       bBtn.classList.toggle("active", savedList.some(item => item.question === q.question));
       
       const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), nBtn = document.getElementById("nextBtn");
       oBox.innerHTML = ""; rBox.innerText = ""; nBtn.style.display = "none";
       
-      q.options.forEach((opt, idx) => {
+      q.options.forEach(opt => {
         const b = document.createElement("button");
         b.className = "option-btn"; b.innerText = opt;
         b.onclick = () => {
-          questionsAttempted++; 
+          questionsAttempted++; // Increment attempt
           document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
-          if(opt === q.answer) { 
-            score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; 
-            if(isWeakMode) {
-              weakList = weakList.filter(item => item.question !== q.question);
-              localStorage.setItem("weak_questions", JSON.stringify(weakList));
-            }
-          }
-          else { 
-            rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; 
-            wrongQuestions.push(q); 
-            // Add to weak list if not already there
-            if(!weakList.some(item => item.question === q.question)) {
-              weakList.push(q);
-              localStorage.setItem("weak_questions", JSON.stringify(weakList));
-            }
-          }
+          if(opt === q.answer) { score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; }
+          else { rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; wrongQuestions.push(q); }
           nBtn.style.display = "block";
         };
         oBox.appendChild(b);
       });
     }
 
-    function readFullQuestion() {
-      const q = selectedQuestions[currentIdx];
-      let text = q.question + ". ऑप्शंस हैं: " + q.options.join(", ");
-      speak(text);
-    }
-
     function nextQuestionTrigger() {
-      window.speechSynthesis.cancel();
       currentIdx++;
       currentIdx < selectedQuestions.length ? showQuestion() : showFinalResult();
     }
 
     function showFinalResult() {
       clearInterval(timerInterval);
-      window.speechSynthesis.cancel();
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("progressBar").style.width = "100%";
 
+      // --- ATTEMPT LOGIC (80%) ---
       const attemptPercent = (questionsAttempted / selectedQuestions.length) * 100;
-      if (!isWeakMode && attemptPercent >= 80 && currentSub !== "all" && currentCh !== "all") {
+      if (attemptPercent >= 80 && currentSub !== "all" && currentCh !== "all") {
         revisionDates[`${currentSub}_${currentCh}`] = Date.now();
         localStorage.setItem("revision_dates", JSON.stringify(revisionDates));
       }
 
       let resHTML = `<div class="result"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>`;
-      if(!isWeakMode && attemptPercent < 80) resHTML += `<p style="color:#e74c3c;">⚠️ 80% सवाल नहीं हुए, ट्रैकर अपडेट नहीं हुआ।</p>`;
+      if(attemptPercent < 80) resHTML += `<p style="color:#e74c3c;">⚠️ आपने 80% सवाल हल नहीं किए, ट्रैकर अपडेट नहीं हुआ।</p>`;
       if(wrongQuestions.length > 0) resHTML += `<button class="main-btn" style="background:#f39c12; color:white;" onclick="retryWrong()">🔄 गलत सवाल सुधारें (${wrongQuestions.length})</button>`;
       resHTML += `<button class="main-btn" onclick="goToHome()">🏠 होम</button></div>`;
       document.getElementById("quizArea").innerHTML = resHTML;
       document.getElementById("quitBtn").style.display = "none";
-      updateWeakBtn();
     }
 
     function goToHome() {
       currentIdx = 0; score = 0; questionsAttempted = 0; wrongQuestions = [];
       clearInterval(timerInterval);
-      window.speechSynthesis.cancel();
       document.getElementById("quizArea").style.display = "none";
       document.getElementById("pCont").style.display = "none";
       document.getElementById("setupArea").style.display = "block";
@@ -314,18 +257,6 @@
       document.getElementById("quitBtn").style.display = "none";
       document.getElementById("progressBar").style.width = "0%";
       document.getElementById("trackerArea").style.display = "none";
-      updateWeakBtn();
-    }
-
-    function updateWeakBtn() {
-      const btn = document.getElementById("weakAreasBtn");
-      const count = document.getElementById("weakCount");
-      if(weakList.length > 0) {
-        btn.style.display = "block";
-        count.innerText = weakList.length;
-      } else {
-        btn.style.display = "none";
-      }
     }
 
     function handleBookmarkClick() {
@@ -339,8 +270,8 @@
 
     function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "block" : "none"; }
     function retryWrong() { selectedQuestions = [...wrongQuestions]; initQuizUI(); }
-    function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
-    function startSavedPractice() { isWeakMode = false; selectedQuestions = [...savedList]; initQuizUI(); }
+    function quitQuiz() { if(confirm("क्विज़ छोड़ें? (अगर 80% सवाल नहीं हुए तो ट्रैकर अपडेट नहीं होगा)")) showFinalResult(); }
+    function startSavedPractice() { selectedQuestions = [...savedList]; initQuizUI(); }
   </script>
 </body>
 </html>
