@@ -239,22 +239,19 @@
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   
-  // डिवाइस की सबसे अच्छी आवाज़ चुनने की कोशिश
-  let voices = window.speechSynthesis.getVoices();
-  let hindiVoice = voices.find(v => v.lang.includes('hi-IN') && v.name.includes('Google')) || 
-                   voices.find(v => v.lang.includes('hi-IN'));
+  // सिंपल और साफ़ हिंदी आवाज़
+  utterance.lang = 'hi-IN';
+  utterance.pitch = 1;  // नॉर्मल आवाज़
+  utterance.rate = 1;   // नॉर्मल रफ़्तार (बिना अटके)
   
-  if (hindiVoice) {
-    utterance.voice = hindiVoice;
-  } else {
-    utterance.lang = 'hi-IN';
-  }
-
-  utterance.pitch = 0.9;  // थोड़ी भारी और गंभीर आवाज़ (Premium Feel)
-  utterance.rate = 0.9;   // बोलने की रफ़्तार (0.9 एकदम नेचुरल लगती है)
-  utterance.volume = 1;
-
   window.speechSynthesis.speak(utterance);
+}
+
+function readFullQuestion() {
+  const q = selectedQuestions[currentIdx];
+  // एकदम सीधा और साफ़ टेक्स्ट, बिना किसी फालतू गैप के
+  let textToRead = q.question + ". . ऑप्शंस हैं. . " + q.options.join(". . ");
+  speak(textToRead);
 }
 
 function readFullQuestion() {
