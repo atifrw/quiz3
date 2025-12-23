@@ -236,11 +236,39 @@
     }
 
     function speak(text) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'hi-IN';
-      window.speechSynthesis.speak(utterance);
-    }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  
+  // डिवाइस की सबसे अच्छी आवाज़ चुनने की कोशिश
+  let voices = window.speechSynthesis.getVoices();
+  let hindiVoice = voices.find(v => v.lang.includes('hi-IN') && v.name.includes('Google')) || 
+                   voices.find(v => v.lang.includes('hi-IN'));
+  
+  if (hindiVoice) {
+    utterance.voice = hindiVoice;
+  } else {
+    utterance.lang = 'hi-IN';
+  }
+
+  utterance.pitch = 0.9;  // थोड़ी भारी और गंभीर आवाज़ (Premium Feel)
+  utterance.rate = 0.9;   // बोलने की रफ़्तार (0.9 एकदम नेचुरल लगती है)
+  utterance.volume = 1;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function readFullQuestion() {
+  const q = selectedQuestions[currentIdx];
+  // बीच में गैप देने के लिए कोमा (,) और विराम चिन्हों का इस्तेमाल
+  let textToRead = `${q.question} . . . , विकल्प हैं , , `;
+  
+  q.options.forEach((opt, index) => {
+    textToRead += ` , ${index + 1} , , ${opt} . . . `;
+  });
+
+  speak(textToRead);
+}
+
 
     function showQuestion() {
       const q = selectedQuestions[currentIdx];
