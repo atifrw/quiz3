@@ -7,15 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Eye-Friendly Soft Background */
-      --bg-color: #f5f2eb; 
-      --card-bg: #ffffff; 
-      --text-color: #2c3e50;
-      --question-bg: #ffffff; 
-      --border-color: #e0dcd0; 
-      --btn-bg: #faf9f6; 
-      --primary-color: #5d6d7e; 
-      --progress-color: #27ae60;
+      --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
+      --question-bg: #ffffff; --border-color: #e0dcd0; --btn-bg: #faf9f6; 
+      --primary-color: #5d6d7e; --progress-color: #27ae60;
     }
     [data-theme="dark"] {
       --bg-color: #1a1a1a; --card-bg: #2d2d2d; --text-color: #e0e0e0;
@@ -28,7 +22,6 @@
     .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
 
-    /* Header Styling */
     .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
     .header-left { display: flex; align-items: center; gap: 8px; }
     
@@ -39,7 +32,6 @@
     #bookmarkActionBtn svg { width: 28px; height: 28px; fill: none; stroke: var(--text-color); stroke-width: 2; }
     #bookmarkActionBtn.active svg { fill: var(--text-color); }
 
-    /* Modern Toggle & Slider */
     .voice-switch { position: relative; display: inline-block; width: 34px; height: 18px; }
     .voice-switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
@@ -61,7 +53,11 @@
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
     .option-btn:hover { border-color: var(--primary-color); background: var(--btn-bg); }
     
-    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); }
+    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
+
+    /* Backup UI */
+    .backup-area { display: flex; gap: 10px; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
+    .backup-btn { flex: 1; padding: 10px; font-size: 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: bold; }
 
     .tracker-card { display: none; margin-top: 10px; }
     .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
@@ -84,17 +80,11 @@
           <input type="checkbox" id="autoReadSwitch">
           <span class="slider"></span>
         </label>
-        <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" 
-               style="width:50px; accent-color:var(--progress-color);" 
-               onchange="saveVoiceSpeed(this.value)">
+        <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" style="width:50px;" onchange="saveVoiceSpeed(this.value)">
       </div>
     </div>
-
     <div id="timerDisplay">⏳ 00:00</div>
-    
-    <button id="bookmarkActionBtn" onclick="handleBookmarkClick()">
-      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-    </button>
+    <button id="bookmarkActionBtn" onclick="handleBookmarkClick()"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
     <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
   </div>
 
@@ -103,13 +93,11 @@
 
     <div id="setupArea">
         <h2>🔥 Smart Quiz Pro</h2>
-        
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- सभी विषय --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
-        
         <div class="challenge-grid">
-          <div><label>सवाल:</label><input type="number" id="customLimit" placeholder="उदा. 10"></div>
-          <div><label>मिनट:</label><input type="number" id="customTime" placeholder="उदा. 5"></div>
+          <div><label>सवाल:</label><input type="number" id="customLimit" placeholder="10"></div>
+          <div><label>मिनट:</label><input type="number" id="customTime" placeholder="5"></div>
         </div>
         
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 क्विज़ शुरू करें</button>
@@ -117,12 +105,17 @@
         <button class="main-btn" onclick="toggleTracker()" style="background: #3498db; color: white;">📊 Revision Tracker</button>
         <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल</button>
 
+        <div class="backup-area">
+          <button class="backup-btn" onclick="exportData()">📤 Backup Data</button>
+          <button class="backup-btn" onclick="document.getElementById('importFile').click()">📥 Restore Data</button>
+          <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+        </div>
+
         <div id="trackerArea" class="tracker-card">
           <h3 style="text-align:center;">📅 रिवीजन स्टेटस</h3>
           <div id="trackerContent"></div>
         </div>
     </div>
-
     <div id="quizArea" style="display:none;"></div>
   </div>
 
@@ -133,11 +126,42 @@
     let revisionDates = JSON.parse(localStorage.getItem("revision_dates")) || {};
     let weakList = JSON.parse(localStorage.getItem("weak_questions")) || [];
 
-    window.onload = () => { 
-      checkSavedBtn(); updateWeakBtn(); 
-      const s = localStorage.getItem("quiz_voice_speed");
-      if(s) document.getElementById("voiceSpeed").value = s;
-    };
+    window.onload = () => { checkSavedBtn(); updateWeakBtn(); };
+
+    // --- Export Data ---
+    function exportData() {
+      const data = {
+        bookmarks: savedList,
+        revision: revisionDates,
+        weak: weakList,
+        voiceSpeed: localStorage.getItem("quiz_voice_speed")
+      };
+      const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `quiz_backup_${new Date().toLocaleDateString()}.json`;
+      a.click();
+    }
+
+    // --- Import Data ---
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if(confirm("क्या आप डेटा रिस्टोर करना चाहते हैं? पुराना डेटा बदल जाएगा।")) {
+            localStorage.setItem("quiz_bookmarks", JSON.stringify(data.bookmarks || []));
+            localStorage.setItem("revision_dates", JSON.stringify(data.revision || {}));
+            localStorage.setItem("weak_questions", JSON.stringify(data.weak || []));
+            localStorage.setItem("quiz_voice_speed", data.voiceSpeed || "1");
+            location.reload(); // पेज रिफ्रेश करें ताकि डेटा अपडेट हो जाए
+          }
+        } catch (err) { alert("गलत फाइल! कृपया सही बैकअप फाइल चुनें।"); }
+      };
+      reader.readAsText(file);
+    }
 
     function toggleTheme() {
       const b = document.body;
@@ -187,17 +211,13 @@
     function speak(text) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      let voices = window.speechSynthesis.getVoices();
-      let v = voices.find(v => v.name.includes('Google') && v.lang.includes('hi')) || voices.find(v => v.lang.includes('hi'));
-      if (v) utterance.voice = v;
       utterance.rate = parseFloat(document.getElementById("voiceSpeed").value) || 1;
-      utterance.pitch = 1;
       window.speechSynthesis.speak(utterance);
     }
 
     function readFullQuestion() {
       const q = selectedQuestions[currentIdx];
-      speak(`${q.question}. . . विकल्प हैं . . ${q.options.join(", , ")}`);
+      speak(`${q.question}. विकल्प हैं . . ${q.options.join(", , ")}`);
     }
 
     function startQuiz() {
