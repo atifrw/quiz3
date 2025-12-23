@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📖 Quiz 3 - AI Voice & Weak Areas</title>
+  <title>📖 Quiz 3 - Eye-Friendly Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #2c3e50;
-      --question-bg: #eef2f7; --border-color: #dcdde1; --btn-bg: #f8f9fa;
-      --primary-color: #5d6d7e; --progress-color: #2ecc71;
+      /* NEW: Soft Paper Background for Eye Protection */
+      --bg-color: #f5f2eb; 
+      --card-bg: #ffffff; 
+      --text-color: #2c3e50;
+      --question-bg: #ffffff; 
+      --border-color: #e0dcd0; 
+      --btn-bg: #faf9f6; 
+      --primary-color: #5d6d7e; 
+      --progress-color: #27ae60;
     }
     [data-theme="dark"] {
       --bg-color: #1a1a1a; --card-bg: #2d2d2d; --text-color: #e0e0e0;
@@ -17,37 +23,46 @@
       --primary-color: #8da2b5;
     }
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; }
+    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     
-    .progress-container { width: 100%; background: #eee; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
+    .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
 
-    .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 5px; }
-    #themeBtn, #quitBtn, #bookmarkActionBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+    .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    
+    #themeBtn, #quitBtn, #bookmarkActionBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
     #quitBtn { background: #e74c3c; display: none; }
     
     #bookmarkActionBtn { background: transparent; font-size: 20px; padding: 0; display: none; }
-    #bookmarkActionBtn svg { width: 28px; height: 28px; fill: none; stroke: var(--text-color); stroke-width: 2; transition: 0.2s; }
+    #bookmarkActionBtn svg { width: 28px; height: 28px; fill: none; stroke: var(--text-color); stroke-width: 2; }
     #bookmarkActionBtn.active svg { fill: var(--text-color); }
 
-    #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; margin-bottom: 10px; text-align: center; }
+    .voice-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+    .voice-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--progress-color); }
+    input:checked + .slider:before { transform: translateX(18px); }
+    .voice-label { font-size: 11px; font-weight: bold; margin-right: 2px; }
 
-    h2 { text-align: center; margin-top: 0; }
+    #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
+
+    h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
     select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; }
 
-    .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--question-bg); padding: 15px; border-radius: 12px; }
+    .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
     .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
 
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; position: relative; }
-    
-    /* Voice Button Style */
-    .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; }
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
 
     .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
-    .option-btn:hover { background: var(--primary-color); color: white; }
+    .option-btn:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
     
-    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
+    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); }
 
+    /* Tracker CSS */
     .tracker-card { display: none; margin-top: 10px; }
     .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
     .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
@@ -57,19 +72,27 @@
     .status-yellow { background: #f1c40f; }
     .status-red { background: #e74c3c; }
     .last-date { font-size: 11px; color: #888; }
-
-    /* Switch Style for Auto-Read */
-    .switch-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; font-weight: bold; }
   </style>
 </head>
 <body>
 
   <div class="header-btns">
-    <button id="themeBtn" onclick="toggleTheme()">🌙 Mode</button>
+    <div class="header-left">
+      <button id="themeBtn" onclick="toggleTheme()">🌙</button>
+      <div style="display:flex; align-items:center;">
+        <span class="voice-label">🔊</span>
+        <label class="voice-switch">
+          <input type="checkbox" id="autoReadSwitch">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div id="timerDisplay">⏳ 00:00</div>
+    
     <button id="bookmarkActionBtn" onclick="handleBookmarkClick()">
       <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
     </button>
-    <div id="timerDisplay">⏳ 00:00</div>
     <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
   </div>
 
@@ -78,11 +101,7 @@
 
     <div id="setupArea">
         <h2>🔥 Smart Quiz Pro</h2>
-        <div class="switch-container">
-          <label>🔊 Auto-Read:</label>
-          <input type="checkbox" id="autoReadSwitch">
-        </div>
-
+        
         <select id="subjectSelect" onchange="updateChapters()"><option value="all">-- सभी विषय --</option></select>
         <select id="chapterSelect"><option value="all">-- सभी अध्याय --</option></select>
         
@@ -240,7 +259,7 @@
       const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), nBtn = document.getElementById("nextBtn");
       oBox.innerHTML = ""; rBox.innerText = ""; nBtn.style.display = "none";
       
-      q.options.forEach((opt, idx) => {
+      q.options.forEach((opt) => {
         const b = document.createElement("button");
         b.className = "option-btn"; b.innerText = opt;
         b.onclick = () => {
@@ -256,7 +275,6 @@
           else { 
             rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; 
             wrongQuestions.push(q); 
-            // Add to weak list if not already there
             if(!weakList.some(item => item.question === q.question)) {
               weakList.push(q);
               localStorage.setItem("weak_questions", JSON.stringify(weakList));
@@ -270,7 +288,7 @@
 
     function readFullQuestion() {
       const q = selectedQuestions[currentIdx];
-      let text = q.question + ". ऑप्शंस हैं: " + q.options.join(", ");
+      let text = q.question + ". विकल्प हैं: " + q.options.join(", ");
       speak(text);
     }
 
