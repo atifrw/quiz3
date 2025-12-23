@@ -107,7 +107,7 @@
       b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
     }
 
-    fetch("quiz3.json?v=" + Math.random()).then(r => r.json()).then(j => {
+    fetch("Quiz3.json?v=" + Math.random()).then(r => r.json()).then(j => {
       quizData = j;
       const s = document.getElementById("subjectSelect");
       Object.keys(j).forEach(k => s.add(new Option(k, k)));
