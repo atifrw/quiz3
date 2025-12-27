@@ -55,6 +55,23 @@
     
     #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
 
+    /* New Explanation Styling */
+    .explanation-box {
+      display: none;
+      background: #eef2f7;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+    [data-theme="dark"] .explanation-box {
+      background: #3a3a3a;
+      border-left-color: #8da2b5;
+    }
+
     .backup-area { display: flex; gap: 10px; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
     .backup-btn { flex: 1; padding: 10px; font-size: 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: bold; }
 
@@ -131,10 +148,9 @@
     window.onload = () => { 
       checkSavedBtn(); 
       updateWeakBtn(); 
-      checkResumeStatus(); // Check if any quiz to resume
+      checkResumeStatus(); 
     };
 
-    // --- NEW: RESUME LOGIC ---
     function checkResumeStatus() {
       const savedSession = localStorage.getItem("quiz_session");
       const btn = document.getElementById("resumeBtn");
@@ -187,7 +203,6 @@
         showQuestion();
       }
     }
-    // -------------------------
 
     function exportData() {
       const data = {
@@ -280,7 +295,7 @@
     }
 
     function startQuiz() {
-      clearSession(); // New quiz starts, clear old session
+      clearSession();
       isWeakMode = false;
       currentSub = document.getElementById("subjectSelect").value;
       currentCh = document.getElementById("chapterSelect").value;
@@ -334,7 +349,8 @@
         <div id="questionBox" class="question-card"></div>
         <div id="optionsBox"></div>
         <div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
-        <button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button>`;
+        <button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button>
+        <div id="explanationBox" class="explanation-box"></div>`;
     }
 
     function showQuestion() {
@@ -348,8 +364,14 @@
       const bBtn = document.getElementById("bookmarkActionBtn");
       bBtn.classList.toggle("active", savedList.some(item => item.question === q.question));
       
-      const oBox = document.getElementById("optionsBox"), rBox = document.getElementById("resultBox"), nBtn = document.getElementById("nextBtn");
-      oBox.innerHTML = ""; rBox.innerText = ""; nBtn.style.display = "none";
+      const oBox = document.getElementById("optionsBox"), 
+            rBox = document.getElementById("resultBox"), 
+            nBtn = document.getElementById("nextBtn"),
+            eBox = document.getElementById("explanationBox");
+
+      oBox.innerHTML = ""; rBox.innerText = ""; 
+      nBtn.style.display = "none";
+      eBox.style.display = "none"; 
       
       q.options.forEach((opt) => {
         const b = document.createElement("button");
@@ -357,6 +379,7 @@
         b.onclick = () => {
           questionsAttempted++;
           document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
+          
           if(opt === q.answer) { 
             score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; 
             if(isWeakMode) {
@@ -370,8 +393,15 @@
               weakList.push(q); localStorage.setItem("weak_questions", JSON.stringify(weakList));
             }
           }
+
+          // Show explanation if available in data
+          if(q.explanation) {
+            eBox.innerHTML = `<strong>💡 व्याख्या:</strong><br>${q.explanation}`;
+            eBox.style.display = "block";
+          }
+
           nBtn.style.display = "block";
-          saveCurrentSession(); // Save progress after answering
+          saveCurrentSession();
         };
         oBox.appendChild(b);
       });
@@ -381,7 +411,7 @@
       window.speechSynthesis.cancel();
       currentIdx++; 
       if(currentIdx < selectedQuestions.length) {
-        saveCurrentSession(); // Save when moving to next
+        saveCurrentSession();
         showQuestion();
       } else {
         showFinalResult();
@@ -389,7 +419,7 @@
     }
 
     function showFinalResult() {
-      clearSession(); // Quiz finished, clear saved session
+      clearSession();
       clearInterval(timerInterval); window.speechSynthesis.cancel();
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
@@ -413,13 +443,13 @@
       document.getElementById("pCont").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
       updateWeakBtn();
-      checkResumeStatus(); // Refresh resume button visibility
+      checkResumeStatus();
     }
 
     function updateWeakBtn() {
       const btn = document.getElementById("weakAreasBtn"), count = document.getElementById("weakCount");
-      btn.style.display = weakList.length > 0 ? "block" : "none";
-      count.innerText = weakList.length;
+      btn.style.display = (weakList && weakList.length > 0) ? "block" : "none";
+      if(count) count.innerText = weakList.length;
     }
 
     function handleBookmarkClick() {
