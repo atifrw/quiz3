@@ -17,7 +17,7 @@
       --primary-color: #8da2b5;
     }
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
+    .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
     
     .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
@@ -35,40 +35,35 @@
 
     .voice-switch { position: relative; display: inline-block; width: 34px; height: 18px; }
     .voice-switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; }
     input:checked + .slider { background-color: var(--progress-color); }
     input:checked + .slider:before { transform: translateX(16px); }
 
     #timerDisplay { font-weight: bold; font-size: 18px; color: #e74c3c; display: none; text-align: center; flex-grow: 1; }
-
     h2 { text-align: center; margin-top: 0; color: var(--primary-color); }
     select, input, .main-btn { padding: 12px; font-size: 16px; margin-bottom: 12px; width: 100%; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--btn-bg); color: var(--text-color); box-sizing: border-box; }
 
     .challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
     .challenge-grid label { font-size: 13px; font-weight: bold; margin-bottom: 5px; display: block; }
 
-    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; line-height: 1.5; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .question-card { background: var(--question-bg); border-left: 6px solid var(--primary-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 550; position: relative; }
     .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.6; }
 
-    .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; font-weight: 500; transition: 0.2s; }
+    .option-btn { display: block; background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-color); padding: 14px; margin: 10px 0; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 19px; transition: 0.2s; }
     .option-btn:hover { border-color: var(--primary-color); background: var(--btn-bg); }
     
-    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; text-align: center; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
-
-    .explanation-box { display: none; background: #eef2f7; border-left: 5px solid #3498db; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 16px; line-height: 1.6; color: var(--text-color); }
-    [data-theme="dark"] .explanation-box { background: #3a3a3a; border-left-color: #8da2b5; }
+    #nextBtn { display: none; background: #28a745 !important; color: white !important; border: none; margin-top: 15px; width: 100%; padding: 14px; border-radius: 10px; font-size: 18px; cursor: pointer; }
+    .explanation-box { display: none; background: #eef2f7; border-left: 5px solid #3498db; padding: 15px; margin-top: 15px; border-radius: 8px; }
+    [data-theme="dark"] .explanation-box { background: #3a3a3a; }
 
     .backup-area { display: flex; gap: 10px; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
-    .backup-btn { flex: 1; padding: 10px; font-size: 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: bold; }
+    .backup-btn { flex: 1; padding: 10px; font-size: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); cursor: pointer; }
 
-    /* Filter UI styling */
-    .filter-container { background: var(--bg-color); padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); }
     .tracker-card, .collection-card { display: none; margin-top: 10px; border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; background: var(--card-bg); }
     .subject-group { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
-    .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; }
+    .subject-title { background: var(--primary-color); color: white; padding: 10px; font-weight: bold; }
     .chapter-row { display: flex; justify-content: space-between; padding: 10px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); align-items: center; }
-    .coll-btn { background: var(--progress-color); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -78,10 +73,7 @@
       <button id="themeBtn" onclick="toggleTheme()">🌙</button>
       <div style="display:flex; align-items:center; gap:5px;">
         <span style="font-size:12px;">🔊</span>
-        <label class="voice-switch">
-          <input type="checkbox" id="autoReadSwitch">
-          <span class="slider"></span>
-        </label>
+        <label class="voice-switch"><input type="checkbox" id="autoReadSwitch"><span class="slider"></span></label>
         <input type="range" id="voiceSpeed" min="0.5" max="1.5" step="0.1" value="1" style="width:50px;" onchange="saveVoiceSpeed(this.value)">
       </div>
     </div>
@@ -110,7 +102,16 @@
         
         <button class="main-btn" onclick="startQuiz()" style="background: #5d6d7e; color: white;">🎯 क्विज़ शुरू करें</button>
         <button id="weakAreasBtn" class="main-btn" style="background: #e67e22; color: white; display: none;" onclick="startWeakAreasQuiz()">🔄 Improve Weak Areas (<span id="weakCount">0</span>)</button>
+        
         <button id="collectionMainBtn" class="main-btn" style="background: #e74c3c; color: white; display: none;" onclick="toggleCollection()">❤️ My Collections (Subject-wise)</button>
+        
+        <div id="collectionArea" class="collection-card">
+          <h3 style="text-align:center;">❤️ Collection Practice</h3>
+          <select id="collSubFilter" onchange="updateCollChapters()"><option value="all">-- विषय चुनें --</option></select>
+          <select id="collChFilter"><option value="all">-- अध्याय चुनें --</option></select>
+          <button class="main-btn" onclick="startCollectionPractice()" style="background: #27ae60; color: white; margin-top: 10px;">🚀 Practice Start</button>
+        </div>
+
         <button class="main-btn" onclick="toggleTracker()" style="background: #3498db; color: white;">📊 Revision Tracker</button>
         <button id="savedPracticeBtn" class="main-btn" style="background:#f1c40f; color:#000; display:none;" onclick="startSavedPractice()">⭐ सहेजे गए सवाल (Bookmarks)</button>
 
@@ -123,15 +124,6 @@
         <div id="trackerArea" class="tracker-card">
           <h3 style="text-align:center;">📅 रिवीजन स्टेटस</h3>
           <div id="trackerContent"></div>
-        </div>
-
-        <div id="collectionArea" class="collection-card">
-          <h3 style="text-align:center;">❤️ सहेजे गए विषय</h3>
-          <div class="filter-container">
-            <select id="collSubFilter" onchange="updateCollChapters()"><option value="all">-- Filter Subject --</option></select>
-            <select id="collChFilter" onchange="renderCollection()"><option value="all">-- Filter Chapter --</option></select>
-          </div>
-          <div id="collectionContent"></div>
         </div>
     </div>
     <div id="quizArea" style="display:none;"></div>
@@ -147,75 +139,29 @@
     let collections = JSON.parse(localStorage.getItem("quiz_collections")) || {};
 
     window.onload = () => { 
-      checkSavedBtn(); 
-      updateWeakBtn(); 
-      checkResumeStatus();
-      updateCollectionBtn();
+      checkSavedBtn(); updateWeakBtn(); checkResumeStatus(); updateCollectionBtn();
     };
 
     function checkResumeStatus() {
       const savedSession = localStorage.getItem("quiz_session");
-      const btn = document.getElementById("resumeBtn");
       if (savedSession) {
         const session = JSON.parse(savedSession);
-        btn.innerText = `🕒 पिछला क्विज़ जारी रखें (Q. ${session.currentIdx + 1})`;
-        btn.style.display = "block";
-      } else { btn.style.display = "none"; }
-    }
-
-    function saveCurrentSession() {
-      const session = { selectedQuestions, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode };
-      localStorage.setItem("quiz_session", JSON.stringify(session));
-    }
-
-    function clearSession() {
-      localStorage.removeItem("quiz_session");
-      document.getElementById("resumeBtn").style.display = "none";
-    }
-
-    function resumeQuiz() {
-      const savedSession = localStorage.getItem("quiz_session");
-      if (savedSession) {
-        const session = JSON.parse(savedSession);
-        selectedQuestions = session.selectedQuestions;
-        currentIdx = session.currentIdx;
-        score = session.score;
-        questionsAttempted = session.questionsAttempted;
-        currentSub = session.currentSub;
-        currentCh = session.currentCh;
-        isWeakMode = session.isWeakMode;
-        initQuizUI_Display();
-        renderLayout();
-        showQuestion();
+        document.getElementById("resumeBtn").innerText = `🕒 पिछला क्विज़ जारी रखें (Q. ${session.currentIdx + 1})`;
+        document.getElementById("resumeBtn").style.display = "block";
       }
     }
 
-    function exportData() {
-      const data = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections, voiceSpeed: localStorage.getItem("quiz_voice_speed") };
-      const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `quiz_backup_${new Date().toLocaleDateString()}.json`;
-      a.click();
+    function saveCurrentSession() {
+      localStorage.setItem("quiz_session", JSON.stringify({ selectedQuestions, currentIdx, score, questionsAttempted, currentSub, currentCh, isWeakMode }));
     }
 
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          if(confirm("डेटा रिस्टोर करें?")) {
-            localStorage.setItem("quiz_bookmarks", JSON.stringify(data.bookmarks || []));
-            localStorage.setItem("revision_dates", JSON.stringify(data.revision || {}));
-            localStorage.setItem("weak_questions", JSON.stringify(data.weak || []));
-            localStorage.setItem("quiz_collections", JSON.stringify(data.collections || {}));
-            location.reload();
-          }
-        } catch (err) { alert("गलत फाइल!"); }
-      };
-      reader.readAsText(file);
+    function resumeQuiz() {
+      const session = JSON.parse(localStorage.getItem("quiz_session"));
+      if (session) {
+        selectedQuestions = session.selectedQuestions; currentIdx = session.currentIdx; score = session.score;
+        questionsAttempted = session.questionsAttempted; currentSub = session.currentSub; currentCh = session.currentCh; isWeakMode = session.isWeakMode;
+        initQuizUI_Display(); renderLayout(); showQuestion();
+      }
     }
 
     function toggleTheme() {
@@ -235,46 +181,16 @@
       if(s !== "all" && quizData[s]) Object.keys(quizData[s]).forEach(k => c.add(new Option(k, k)));
     }
 
-    // Tracker logic
-    function toggleTracker() {
-      const area = document.getElementById("trackerArea");
-      area.style.display = (area.style.display === "block") ? "none" : "block";
-      if(area.style.display === "block") renderTracker();
-    }
-
-    function renderTracker() {
-      const content = document.getElementById("trackerContent"), now = Date.now();
-      content.innerHTML = "";
-      Object.keys(quizData).forEach(subject => {
-        let subHtml = `<div class="subject-group"><div class="subject-title">${subject}</div>`;
-        Object.keys(quizData[subject]).forEach(chapter => {
-          const lastDate = revisionDates[`${subject}_${chapter}`];
-          let statusClass = "status-red", dateText = "कभी नहीं";
-          if(lastDate) {
-            const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
-            dateText = new Date(lastDate).toLocaleDateString();
-            if(diffDays <= 15) statusClass = "status-green";
-            else if(diffDays <= 30) statusClass = "status-yellow";
-          }
-          subHtml += `<div class="chapter-row"><div><span class="status-badge ${statusClass}"></span>${chapter}</div><span style="font-size:11px; color:#888;">${dateText}</span></div>`;
-        });
-        content.innerHTML += subHtml + `</div>`;
-      });
-    }
-
-    // ❤️ Collection Logic with Dropdowns
+    // ❤️ Collection Logic (Direct Start)
     function toggleCollection() {
       const area = document.getElementById("collectionArea");
       area.style.display = (area.style.display === "block") ? "none" : "block";
-      if(area.style.display === "block") {
-        fillCollFilters();
-        renderCollection();
-      }
+      if(area.style.display === "block") fillCollFilters();
     }
 
     function fillCollFilters() {
       const sFilter = document.getElementById("collSubFilter");
-      sFilter.innerHTML = "<option value='all'>-- All Subjects --</option>";
+      sFilter.innerHTML = "<option value='all'>-- सभी विषय --</option>";
       Object.keys(collections).forEach(s => sFilter.add(new Option(s, s)));
       updateCollChapters();
     }
@@ -282,103 +198,54 @@
     function updateCollChapters() {
       const s = document.getElementById("collSubFilter").value;
       const cFilter = document.getElementById("collChFilter");
-      cFilter.innerHTML = "<option value='all'>-- All Chapters --</option>";
+      cFilter.innerHTML = "<option value='all'>-- सभी अध्याय --</option>";
       if(s !== "all" && collections[s]) {
         Object.keys(collections[s]).forEach(c => cFilter.add(new Option(c, c)));
       }
-      renderCollection();
     }
 
-    function renderCollection() {
-      const content = document.getElementById("collectionContent");
-      const subFilter = document.getElementById("collSubFilter").value;
-      const chFilter = document.getElementById("collChFilter").value;
-      content.innerHTML = "";
-      
-      let subsToDisplay = subFilter === "all" ? Object.keys(collections) : [subFilter];
-      
-      subsToDisplay.forEach(sub => {
-        if(!collections[sub]) return;
-        let subHtml = `<div class="subject-group"><div class="subject-title"><span>${sub}</span> <button class="coll-btn" onclick="startCollectionQuiz('${sub}', 'all')">सब पढ़ें</button></div>`;
-        
-        let chaptersToDisplay = chFilter === "all" ? Object.keys(collections[sub]) : [chFilter];
-        let hasChapter = false;
+    function startCollectionPractice() {
+      const sub = document.getElementById("collSubFilter").value;
+      const ch = document.getElementById("collChFilter").value;
+      let qs = [];
 
-        chaptersToDisplay.forEach(ch => {
-          if(!collections[sub][ch]) return;
-          hasChapter = true;
-          const count = collections[sub][ch].length;
-          subHtml += `<div class="chapter-row"><div>❤️ ${ch} (${count})</div><button class="coll-btn" style="background:#3498db" onclick="startCollectionQuiz('${sub}', '${ch}')">प्रैक्टिस</button></div>`;
-        });
-        
-        if(hasChapter) content.innerHTML += subHtml + `</div>`;
-      });
-      if(content.innerHTML === "") content.innerHTML = "<p style='text-align:center'>कोई डेटा नहीं मिला।</p>";
+      if(sub === "all") {
+        Object.keys(collections).forEach(s => Object.keys(collections[s]).forEach(c => qs = qs.concat(collections[s][c])));
+      } else if(ch === "all") {
+        Object.keys(collections[sub]).forEach(c => qs = qs.concat(collections[sub][c]));
+      } else { qs = collections[sub][ch]; }
+
+      if(qs.length === 0) return alert("इस सेक्शन में कोई सवाल नहीं है!");
+      
+      localStorage.removeItem("quiz_session");
+      isWeakMode = false;
+      selectedQuestions = [...qs].sort(() => Math.random() - 0.5);
+      initQuizUI();
     }
 
     function updateCollectionBtn() {
       document.getElementById("collectionMainBtn").style.display = Object.keys(collections).length > 0 ? "block" : "none";
     }
 
-    function saveVoiceSpeed(val) { localStorage.setItem("quiz_voice_speed", val); }
-
-    function speak(text) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = parseFloat(document.getElementById("voiceSpeed").value) || 1;
-      window.speechSynthesis.speak(utterance);
-    }
-
     function startQuiz() {
-      clearSession();
-      isWeakMode = false;
-      currentSub = document.getElementById("subjectSelect").value;
-      currentCh = document.getElementById("chapterSelect").value;
+      localStorage.removeItem("quiz_session");
+      isWeakMode = false; currentSub = document.getElementById("subjectSelect").value; currentCh = document.getElementById("chapterSelect").value;
       let allTempQ = [];
-      if (currentSub === "all") {
-        Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => allTempQ = allTempQ.concat(quizData[s][c])));
-      } else if (currentCh === "all") {
-        Object.keys(quizData[currentSub]).forEach(c => allTempQ = allTempQ.concat(quizData[currentSub][c]));
-      } else { allTempQ = [...quizData[currentSub][currentCh]]; }
+      if (currentSub === "all") { Object.keys(quizData).forEach(s => Object.keys(quizData[s]).forEach(c => allTempQ = allTempQ.concat(quizData[s][c]))); }
+      else if (currentCh === "all") { Object.keys(quizData[currentSub]).forEach(c => allTempQ = allTempQ.concat(quizData[currentSub][c])); }
+      else { allTempQ = [...quizData[currentSub][currentCh]]; }
 
       if(allTempQ.length === 0) return alert("सवाल नहीं मिले!");
-      allTempQ.sort(() => Math.random() - 0.5);
       const limit = parseInt(document.getElementById("customLimit").value);
-      selectedQuestions = (limit > 0 && limit <= allTempQ.length) ? allTempQ.slice(0, limit) : allTempQ;
+      selectedQuestions = (limit > 0) ? allTempQ.sort(() => Math.random() - 0.5).slice(0, limit) : allTempQ.sort(() => Math.random() - 0.5);
       
       if(parseInt(document.getElementById("customTime").value) > 0) startTimer(parseInt(document.getElementById("customTime").value));
       initQuizUI();
     }
 
-    function startWeakAreasQuiz() {
-      clearSession(); if(weakList.length === 0) return;
-      isWeakMode = true; selectedQuestions = [...weakList].sort(() => Math.random() - 0.5);
-      initQuizUI();
-    }
-
-    function startCollectionQuiz(sub, ch) {
-      clearSession();
-      let qs = [];
-      if(ch === 'all') { Object.keys(collections[sub]).forEach(key => qs = qs.concat(collections[sub][key])); } 
-      else { qs = collections[sub][ch]; }
-      if(qs.length === 0) return;
-      isWeakMode = false; selectedQuestions = [...qs].sort(() => Math.random() - 0.5);
-      initQuizUI();
-    }
-
-    function startTimer(m) {
-      let time = m * 60; const display = document.getElementById("timerDisplay");
-      display.style.display = "block";
-      timerInterval = setInterval(() => {
-        display.innerText = `⏳ ${Math.floor(time/60).toString().padStart(2,'0')}:${(time%60).toString().padStart(2,'0')}`;
-        if (--time < 0) { clearInterval(timerInterval); showFinalResult(); }
-      }, 1000);
-    }
-
     function initQuizUI() {
       currentIdx = score = questionsAttempted = 0; wrongQuestions = [];
-      initQuizUI_Display();
-      renderLayout(); showQuestion();
+      initQuizUI_Display(); renderLayout(); showQuestion();
     }
 
     function initQuizUI_Display() {
@@ -391,35 +258,17 @@
     }
 
     function renderLayout() {
-      document.getElementById("quizArea").innerHTML = `
-        <div id="qCount" style="text-align:right; font-size:14px; font-weight:bold; margin-bottom:5px;"></div>
-        <div id="questionBox" class="question-card"></div>
-        <div id="optionsBox"></div>
-        <div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div>
-        <button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button>
-        <div id="explanationBox" class="explanation-box"></div>`;
-    }
-
-    function findQuestionMeta(q) {
-        for(let s in quizData) {
-            for(let c in quizData[s]) {
-                if(quizData[s][c].some(item => item.question === q.question)) {
-                    q.sub = s; q.ch = c; return;
-                }
-            }
-        }
+      document.getElementById("quizArea").innerHTML = `<div id="qCount" style="text-align:right; font-weight:bold;"></div><div id="questionBox" class="question-card"></div><div id="optionsBox"></div><div id="resultBox" style="text-align:center; font-weight:bold; margin-top:10px;"></div><button id="nextBtn" onclick="nextQuestionTrigger()">➡️ अगला सवाल</button><div id="explanationBox" class="explanation-box"></div>`;
     }
 
     function showQuestion() {
       const q = selectedQuestions[currentIdx];
       if(!q.sub || !q.ch) findQuestionMeta(q);
-
       document.getElementById("progressBar").style.width = (currentIdx / selectedQuestions.length) * 100 + "%";
       document.getElementById("qCount").innerText = `सवाल: ${currentIdx + 1} / ${selectedQuestions.length}`;
       document.getElementById("questionBox").innerHTML = `${q.question} <button class="speak-btn" onclick="speak('${q.question}')">🔊</button>`;
       
       if(document.getElementById("autoReadSwitch").checked) setTimeout(() => speak(q.question), 500);
-
       document.getElementById("bookmarkActionBtn").classList.toggle("active", savedList.some(item => item.question === q.question));
       let isHearted = (q.sub && q.ch && collections[q.sub] && collections[q.sub][q.ch]) ? collections[q.sub][q.ch].some(item => item.question === q.question) : false;
       document.getElementById("heartActionBtn").classList.toggle("active", isHearted);
@@ -430,16 +279,9 @@
       q.options.forEach((opt) => {
         const b = document.createElement("button"); b.className = "option-btn"; b.innerText = opt;
         b.onclick = () => {
-          questionsAttempted++;
-          document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
-          if(opt === q.answer) { 
-            score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; 
-            if(isWeakMode) { weakList = weakList.filter(i => i.question !== q.question); localStorage.setItem("weak_questions", JSON.stringify(weakList)); }
-          } else { 
-            rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; 
-            wrongQuestions.push(q); 
-            if(!weakList.some(i => i.question === q.question)) { weakList.push(q); localStorage.setItem("weak_questions", JSON.stringify(weakList)); }
-          }
+          questionsAttempted++; document.querySelectorAll(".option-btn").forEach(btn => btn.style.pointerEvents = "none");
+          if(opt === q.answer) { score++; rBox.innerHTML = "<span style='color:#27ae60'>✅ सही!</span>"; }
+          else { rBox.innerHTML = `<span style='color:#e74c3c'>❌ गलत! सही: ${q.answer}</span>`; wrongQuestions.push(q); if(!weakList.some(i => i.question === q.question)) { weakList.push(q); localStorage.setItem("weak_questions", JSON.stringify(weakList)); } }
           if(q.explanation) { eBox.innerHTML = `<strong>💡 व्याख्या:</strong><br>${q.explanation}`; eBox.style.display = "block"; }
           nBtn.style.display = "block"; saveCurrentSession();
         };
@@ -447,21 +289,20 @@
       });
     }
 
+    function findQuestionMeta(q) {
+        for(let s in quizData) for(let c in quizData[s]) if(quizData[s][c].some(item => item.question === q.question)) { q.sub = s; q.ch = c; return; }
+    }
+
     function nextQuestionTrigger() {
       window.speechSynthesis.cancel(); currentIdx++; 
-      if(currentIdx < selectedQuestions.length) { saveCurrentSession(); showQuestion(); } 
-      else { showFinalResult(); }
+      if(currentIdx < selectedQuestions.length) { saveCurrentSession(); showQuestion(); } else { showFinalResult(); }
     }
 
     function showFinalResult() {
-      clearSession(); clearInterval(timerInterval); window.speechSynthesis.cancel();
+      localStorage.removeItem("quiz_session"); clearInterval(timerInterval); window.speechSynthesis.cancel();
       document.getElementById("timerDisplay").style.display = "none";
       document.getElementById("bookmarkActionBtn").style.display = "none";
       document.getElementById("heartActionBtn").style.display = "none";
-      
-      if (!isWeakMode && (questionsAttempted / selectedQuestions.length) * 100 >= 80 && currentSub !== "all" && currentCh !== "all") {
-        revisionDates[`${currentSub}_${currentCh}`] = Date.now(); localStorage.setItem("revision_dates", JSON.stringify(revisionDates));
-      }
       document.getElementById("quizArea").innerHTML = `<div style="text-align:center;"><h3>🏁 रिजल्ट: ${score}/${selectedQuestions.length}</h3>` + (wrongQuestions.length > 0 ? `<button class="main-btn" style="background:#f39c12; color:white;" onclick="retryWrong()">🔄 गलत सुधारें (${wrongQuestions.length})</button>` : "") + `<button class="main-btn" onclick="goToHome()">🏠 होम</button></div>`;
       document.getElementById("quitBtn").style.display = "none";
       updateWeakBtn(); updateCollectionBtn();
@@ -472,26 +313,12 @@
       document.getElementById("setupArea").style.display = "block";
       document.getElementById("pCont").style.display = "none";
       document.getElementById("quitBtn").style.display = "none";
-      updateWeakBtn(); updateCollectionBtn(); checkResumeStatus();
-    }
-
-    function updateWeakBtn() {
-      const btn = document.getElementById("weakAreasBtn");
-      btn.style.display = (weakList && weakList.length > 0) ? "block" : "none";
-      if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length;
-    }
-
-    function handleBookmarkClick() {
-      const q = selectedQuestions[currentIdx], idx = savedList.findIndex(i => i.question === q.question);
-      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q);
-      localStorage.setItem("quiz_bookmarks", JSON.stringify(savedList));
-      checkSavedBtn(); document.getElementById("bookmarkActionBtn").classList.toggle("active");
     }
 
     function handleHeartClick() {
       const q = selectedQuestions[currentIdx];
       if(!q.sub || !q.ch) findQuestionMeta(q);
-      if(!q.sub || !q.ch) return alert("विषय की जानकारी नहीं मिली!");
+      if(!q.sub || !q.ch) return;
       if(!collections[q.sub]) collections[q.sub] = {};
       if(!collections[q.sub][q.ch]) collections[q.sub][q.ch] = [];
       const idx = collections[q.sub][q.ch].findIndex(i => i.question === q.question);
@@ -505,10 +332,24 @@
       updateCollectionBtn();
     }
 
+    function handleBookmarkClick() {
+      const q = selectedQuestions[currentIdx], idx = savedList.findIndex(i => i.question === q.question);
+      idx > -1 ? savedList.splice(idx, 1) : savedList.push(q);
+      localStorage.setItem("quiz_bookmarks", JSON.stringify(savedList));
+      checkSavedBtn(); document.getElementById("bookmarkActionBtn").classList.toggle("active");
+    }
+
+    function speak(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = parseFloat(document.getElementById("voiceSpeed").value); window.speechSynthesis.speak(u); }
     function checkSavedBtn() { document.getElementById("savedPracticeBtn").style.display = savedList.length > 0 ? "block" : "none"; }
+    function updateWeakBtn() { document.getElementById("weakAreasBtn").style.display = (weakList.length > 0) ? "block" : "none"; if(document.getElementById("weakCount")) document.getElementById("weakCount").innerText = weakList.length; }
+    function startSavedPractice() { localStorage.removeItem("quiz_session"); isWeakMode = false; selectedQuestions = [...savedList].sort(() => Math.random() - 0.5); initQuizUI(); }
     function retryWrong() { selectedQuestions = [...wrongQuestions]; initQuizUI(); }
     function quitQuiz() { if(confirm("क्विज़ छोड़ें?")) showFinalResult(); }
-    function startSavedPractice() { clearSession(); isWeakMode = false; selectedQuestions = [...savedList]; initQuizUI(); }
+    function startTimer(m) { let t = m * 60; document.getElementById("timerDisplay").style.display = "block"; timerInterval = setInterval(() => { document.getElementById("timerDisplay").innerText = `⏳ ${Math.floor(t/60).toString().padStart(2,'0')}:${(t%60).toString().padStart(2,'0')}`; if (--t < 0) { clearInterval(timerInterval); showFinalResult(); } }, 1000); }
+    function toggleTracker() { const a = document.getElementById("trackerArea"); a.style.display = (a.style.display === "block") ? "none" : "block"; if(a.style.display === "block") renderTracker(); }
+    function saveVoiceSpeed(v) { localStorage.setItem("quiz_voice_speed", v); }
+    function exportData() { const d = { bookmarks: savedList, revision: revisionDates, weak: weakList, collections: collections }; const blob = new Blob([JSON.stringify(d)], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "quiz_backup.json"; a.click(); }
+    function importData(e) { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = (ev) => { const d = JSON.parse(ev.target.result); localStorage.setItem("quiz_bookmarks", JSON.stringify(d.bookmarks || [])); localStorage.setItem("quiz_collections", JSON.stringify(d.collections || {})); location.reload(); }; r.readAsText(f); }
   </script>
 </body>
 </html>
