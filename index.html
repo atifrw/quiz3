@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>📖 Quiz 3 - Premium Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
   <style>
     :root {
       --bg-color: #f5f2eb; --card-bg: #ffffff; --text-color: #2c3e50;
@@ -22,20 +17,12 @@
       --primary-color: #8da2b5;
     }
     body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; transition: 0.3s; }
-    
-    /* Login Screen Style */
-    #loginArea { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; text-align: center; }
-    .login-card { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
-    .google-btn { background: #4285F4; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; }
-    .user-profile { display: none; align-items: center; gap: 10px; margin-bottom: 15px; background: var(--card-bg); padding: 10px; border-radius: 50px; border: 1px solid var(--border-color); width: fit-content; }
-    .user-profile img { width: 30px; height: 30px; border-radius: 50%; }
-
     .container { max-width: 700px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border-color); }
     
     .progress-container { width: 100%; background: #e0dcd0; height: 8px; border-radius: 5px; margin-bottom: 15px; display: none; }
     #progressBar { height: 100%; width: 0%; background: var(--progress-color); border-radius: 5px; transition: 0.4s; }
 
-    .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; display: none; } /* Hidden until login */
+    .header-btns { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
     .header-left { display: flex; align-items: center; gap: 8px; }
     
     #themeBtn, #quitBtn, #bookmarkActionBtn, #heartActionBtn { padding: 8px 12px; font-size: 13px; background: var(--primary-color); color: white; border: none; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
@@ -89,21 +76,9 @@
 </head>
 <body>
 
-  <div id="loginArea">
-    <div class="login-card">
-        <h2>📖 Quiz 3 Login</h2>
-        <p>क्विज़ शुरू करने के लिए लॉगिन करें</p>
-        <button class="google-btn" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="20">
-            Login with Google
-        </button>
-    </div>
-  </div>
-
-  <div class="header-btns" id="mainHeader">
+  <div class="header-btns">
     <div class="header-left">
       <button id="themeBtn" onclick="toggleTheme()">🌙</button>
-      <div id="userProfile" class="user-profile"></div>
       <div style="display:flex; align-items:center; gap:5px;">
         <span style="font-size:12px;">🔊</span>
         <label class="voice-switch">
@@ -121,7 +96,7 @@
     <button id="quitBtn" onclick="quitQuiz()">⏹️ Quit</button>
   </div>
 
-  <div class="container" id="mainContainer" style="display:none;">
+  <div class="container">
     <div class="progress-container" id="pCont"><div id="progressBar"></div></div>
 
     <div id="setupArea">
@@ -166,59 +141,6 @@
   </div>
 
   <script>
-    // --- FIREBASE INITIALIZATION ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_Wm4oRPvdHJ_9NVHrGGWaom5Y3lu6MBE",
-      authDomain: "mystudyquiz-ac0d9.firebaseapp.com",
-      databaseURL: "https://mystudyquiz-ac0d9-default-rtdb.firebaseio.com",
-      projectId: "mystudyquiz-ac0d9",
-      storageBucket: "mystudyquiz-ac0d9.firebasestorage.app",
-      messagingSenderId: "258779460797",
-      appId: "1:258779460797:web:2201be41a252ce0e53331b",
-      measurementId: "G-CLXDSVMG0"
-    };
-
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const database = firebase.database();
-
-    // --- LOGIN LOGIC ---
-    function loginWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider).then((result) => {
-            checkUser();
-        }).catch((error) => {
-            alert("Login Failed: " + error.message);
-        });
-    }
-
-    function checkUser() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById("loginArea").style.display = "none";
-                document.getElementById("mainContainer").style.display = "block";
-                document.getElementById("mainHeader").style.display = "flex";
-                
-                const up = document.getElementById("userProfile");
-                up.innerHTML = `<img src="${user.photoURL}" alt="User"> <span style="font-size:12px; font-weight:bold;">${user.displayName.split(' ')[0]}</span>`;
-                up.style.display = "flex";
-
-                // Load Data after login
-                initApp();
-            } else {
-                document.getElementById("loginArea").style.display = "flex";
-                document.getElementById("mainContainer").style.display = "none";
-                document.getElementById("mainHeader").style.display = "none";
-            }
-        });
-    }
-
-    // Initialize checking
-    checkUser();
-
-    // --- YOUR ORIGINAL QUIZ LOGIC WRAPPED ---
     let quizData = {}, selectedQuestions = [], wrongQuestions = [], currentIdx = 0, score = 0, timerInterval;
     let questionsAttempted = 0, currentSub = "", currentCh = "", isWeakMode = false;
     let savedList = JSON.parse(localStorage.getItem("quiz_bookmarks")) || [];
@@ -226,19 +148,11 @@
     let weakList = JSON.parse(localStorage.getItem("weak_questions")) || [];
     let collections = JSON.parse(localStorage.getItem("quiz_collections")) || {};
 
-    function initApp() { 
+    window.onload = () => { 
       checkSavedBtn(); 
       updateWeakBtn(); 
       checkResumeStatus(); 
       updateCollectionBtn();
-      
-      // Fetch JSON
-      fetch("Quiz3.json?v=" + Math.random()).then(r => r.json()).then(j => {
-        quizData = j;
-        const s = document.getElementById("subjectSelect");
-        s.innerHTML = "<option value='all'>-- सभी विषय --</option>";
-        Object.keys(j).forEach(k => s.add(new Option(k, k)));
-      });
     };
 
     function checkResumeStatus() {
@@ -305,6 +219,12 @@
       const b = document.body;
       b.hasAttribute("data-theme") ? b.removeAttribute("data-theme") : b.setAttribute("data-theme", "dark");
     }
+
+    fetch("Quiz3.json?v=" + Math.random()).then(r => r.json()).then(j => {
+      quizData = j;
+      const s = document.getElementById("subjectSelect");
+      Object.keys(j).forEach(k => s.add(new Option(k, k)));
+    });
 
     function updateChapters() {
       const s = document.getElementById("subjectSelect").value, c = document.getElementById("chapterSelect");
