@@ -1,0 +1,16 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Smart Quiz Pro",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "QuizApp",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "com.quiz.app",
+  "description": "Smart Quiz Application for learning and revision.",
+  "categories": [
+    "education"
+  ]
+}
