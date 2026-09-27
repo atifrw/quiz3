@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.atifrw.twa",
+        "sha256_cert_fingerprints": ["FE:5A:58:6B:C8:DD:69:15:6E:8C:BA:30:96:2C:21:34:42:AC:3E:3F:A1:F3:FD:43:B8:01:BF:24:0D:BB:A0:FC"]
+      }
+    }]
